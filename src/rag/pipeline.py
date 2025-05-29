@@ -9,17 +9,25 @@ from src.utils.config import get_ares_api_key
 
 
 class RAGPipeline:
-    def __init__(self):
+    def __init__(self, allow_web_search: bool = True):
         self.embedder = EmbeddingModel()
         self.retriever = VectorRetriever()
         self.router = QueryRouter()
         self.generator = RAGGenerator()
         self.cache = SemanticCache(self.embedder)
+        self.allow_web_search = allow_web_search
         self.routes = {
             "OPENAI_QUERY": self.retrieve_and_respond,
             "10K_DOCUMENT_QUERY": self.retrieve_and_respond,
-            "INTERNET_QUERY": self.get_internet_content,
+            "INTERNET_QUERY": (
+                self.get_internet_content
+                if allow_web_search
+                else self.skip_internet_search
+            ),
         }
+
+    def skip_internet_search(self, user_query, action):
+        return "[Web Search Disabled] The system was not allowed to perform an internet search."
 
     def retrieve_and_respond(self, user_query, action):
         # Get context
