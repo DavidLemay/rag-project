@@ -1,1 +1,7 @@
 .env
+
+# Any notebook files
+*.ipynb
+
+# Python cache files
+__pycache__/
