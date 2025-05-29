@@ -17,6 +17,8 @@ python-pptx = "^1.0.2"
 python-dotenv = "^1.1.0"
 torch = "^2.7.0"
 qdrant-client = "^1.14.2"
+transformers = "^4.52.3"
+einops = "^0.8.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -25,6 +27,7 @@ isort = "^6.0.1"
 flake8 = "^7.2.0"
 pytest = "^8.3.5"
 pre-commit = "^4.2.0"
+ipykernel = "^6.29.5"
 
 [build-system]
 requires = ["poetry-core"]

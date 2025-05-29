@@ -33,9 +33,14 @@ class QueryRouter:
 
     def split_subqueries(self, user_query: str):
         split_prompt = f"""
-        You are a query router. If the input contains multiple distinct questions, break it into sub-questions...
-        Query: "{user_query}"
-        """
+You are a query router. If the input contains multiple distinct questions, break it into sub-questions.
+Respond ONLY in the following JSON format:
+{{
+    "subQuestions": ["...", "..."]
+}}
+Return your answer as valid JSON. Do not include anything except the JSON.
+Query: "{user_query}"
+"""
         response = self.client.chat.completions.create(
             model="gpt-4o",
             messages=[{"role": "system", "content": split_prompt}],
