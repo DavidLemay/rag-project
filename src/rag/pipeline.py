@@ -4,6 +4,7 @@ from src.rag.embeddings import EmbeddingModel
 from src.rag.generator import RAGGenerator
 from src.rag.retriever import VectorRetriever
 from src.rag.router import QueryRouter
+from src.rag.semantic_cache import SemanticCache
 from src.utils.config import get_ares_api_key
 
 
@@ -13,6 +14,7 @@ class RAGPipeline:
         self.retriever = VectorRetriever()
         self.router = QueryRouter()
         self.generator = RAGGenerator()
+        self.cache = SemanticCache(self.embedder)
         self.routes = {
             "OPENAI_QUERY": self.retrieve_and_respond,
             "10K_DOCUMENT_QUERY": self.retrieve_and_respond,
@@ -20,27 +22,42 @@ class RAGPipeline:
         }
 
     def retrieve_and_respond(self, user_query, action):
-        try:
-            vector = self.embedder.get_embedding(user_query)
-            context = self.retriever.retrieve(vector, action)
-            if not context:
-                return "No relevant content found."
-            return self.generator.generate(user_query, context)
-        except Exception as e:
-            return f"Error in retrieval/generation: {e}"
+        # Get context
+        vector = self.embedder.get_embedding(user_query)
+        context = self.retriever.retrieve(vector, action)
+        if not context:
+            return "No relevant content found."
+
+        # Check cache
+        cached_answer = self.cache.get(user_query, context)
+        if cached_answer:
+            return f"[Semantic Cache HIT]\n{cached_answer}"
+
+        # Not cached: run generator and cache result
+        answer = self.generator.generate(user_query, context)
+        self.cache.add(user_query, answer, context)
+        return answer
 
     def get_internet_content(self, user_query, action):
+        # Use empty list as context for internet queries
+        context_chunks = []
+        cached_answer = self.cache.get(user_query, context_chunks)
+        if cached_answer:
+            return f"[Semantic Cache HIT]\n{cached_answer}"
+
         url = "https://api-ares.traversaal.ai/live/predict"
         payload = {"query": [user_query]}
         headers = {"x-api-key": get_ares_api_key(), "content-type": "application/json"}
         try:
             response = requests.post(url, json=payload, headers=headers)
             response.raise_for_status()
-            return (
+            answer = (
                 response.json()
                 .get("data", {})
                 .get("response_text", "No response received.")
             )
+            self.cache.add(user_query, answer, context_chunks)
+            return answer
         except Exception as e:
             return f"Internet query failed: {e}"
 

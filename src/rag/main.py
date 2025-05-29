@@ -1,3 +1,6 @@
+import os
+
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 from src.rag.pipeline import RAGPipeline
 
 if __name__ == "__main__":
