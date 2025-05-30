@@ -8,7 +8,7 @@ load_dotenv()
 def get_qdrant_path():
     # Default for local testing; update as needed
     return os.getenv(
-        "QDRANT_PATH", "/content/multi-agent-course/Module_1/Agentic_RAG/qdrant_data"
+        "QDRANT_PATH", "multi-agent-course/Module_1/Agentic_RAG/qdrant_data"
     )
 
 

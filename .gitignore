@@ -8,3 +8,9 @@ __pycache__/
 
 # Semantic cache
 semantic_cache.json
+
+# the repo
+multi-agent-course
+
+# logs
+logs/
