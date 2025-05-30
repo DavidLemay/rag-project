@@ -11,7 +11,7 @@ This project implements a **Retrieval-Augmented Generation (RAG)** system using:
 ---
 
 ## 📁 Project Structure
-
+```yaml
 rag-project/
 ├── app.py # Streamlit UI (entry point)
 ├── src/
@@ -24,10 +24,7 @@ rag-project/
 ├── pyproject.toml
 ├── README.md
 └── .env
-
-yaml
-Copier
-Modifier
+```
 
 ---
 
@@ -40,66 +37,63 @@ Modifier
 ```bash
 git clone <your-repo-url>
 cd rag-project
-2. Clone the Qdrant vector database (required):
-bash
-Copier
-Modifier
+```
+### 2. Clone the Qdrant vector database (required):
+```bash
 git clone https://github.com/hamzafarooq/multi-agent-course.git
+```
 ⚠️ This must be cloned inside the root of the RAG app, so that this folder exists:
 
 multi-agent-course/Module_1/Agentic_RAG/qdrant_data/
 
 This database includes:
 
-opnai_data: vectorized OpenAI documentation
+- opnai_data: vectorized OpenAI documentation
 
-10k_data: vectorized SEC filings (Uber, Lyft)
+- 10k_data: vectorized SEC filings (Uber, Lyft)
 
-3. Install dependencies using Poetry
+### 3. Install dependencies using Poetry
 If you don’t have Poetry:
 
-bash
-Copier
-Modifier
+```bash
 pip install poetry
+```
 Then run:
 
-bash
-Copier
-Modifier
+```bash
 poetry install
-4. Create a .env file (optional)
-env
-Copier
-Modifier
+```
+### 4. Create a .env file (optional)
+```env
 OPENAI_API_KEY=your-key-here
 ARES_API_KEY=your-key-here
 QDRANT_PATH=multi-agent-course/Module_1/Agentic_RAG/qdrant_data
-🚀 Run the App
-bash
-Copier
-Modifier
+``` 
+
+### 🚀 Run the App
+```bash
 poetry run streamlit run app.py
+```
 This will launch a local Streamlit UI at http://localhost:8501
 
-🧠 UI Features
-📝 Ask any question via the text box
+### 🧠 UI Features
+#### 📝 Ask any question via the text box
 
-🔁 Enable or disable web search (uses ARES API)
+#### 🔁 Enable or disable web search (uses ARES API)
 
-💾 Semantic caching to avoid redundant queries
+#### 💾 Semantic caching to avoid redundant queries
 
-📚 Automatic routing to OpenAI docs, 10-Ks, or web
+#### 📚 Automatic routing to OpenAI docs, 10-Ks, or web
 
-📊 Log dashboard with:
+#### 📊 Log dashboard with:
 
-Query count
+##### Query count
 
-Cache hit rate
+##### Cache hit rate
 
-Routing decision breakdown
+##### Routing decision breakdown
 
-Latency stats
+#### Latency stats
 
 📓 Example Queries
 "How do I fine-tune a model with OpenAI?"
@@ -113,4 +107,4 @@ Add document upload support
 
 Integrate user feedback (👍/👎)
 
-Deploy to Streamlit Cloud, Heroku, or Azure
+### Deploy to Streamlit Cloud, Heroku, or Azure
